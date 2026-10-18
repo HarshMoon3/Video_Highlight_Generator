@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Video Highlights — Harsh Verma</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --accent:#C5A15A;
+      --dark:#0b0b0b;
+      --muted:#777;
+      --max-width:1100px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+      color:#fff;
+      background:#0b0b0b;
+      -webkit-font-smoothing:antialiased;
+      line-height:1.45;
+    }
+    a{color:inherit;text-decoration:none}
+
+    /* ── HEADER ── */
+    header{
+      position:fixed;top:0;left:0;right:0;z-index:40;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:18px 36px;
+      background:linear-gradient(180deg,rgba(0,0,0,.45),rgba(0,0,0,.05));
+      backdrop-filter:blur(4px);
+    }
+    .logo{display:flex;gap:12px;align-items:center;font-weight:700;letter-spacing:1px}
+    .logo .mark{
+      width:36px;height:36px;border-radius:50%;
+      border:2px solid rgba(197,161,90,.95);
+      display:inline-grid;place-items:center;
+      font-weight:900;color:var(--accent);
+      font-family:"Playfair Display",serif;
+    }
+    nav ul{display:flex;gap:22px;list-style:none;margin:0;padding:0;color:#ddd;font-weight:500}
+    nav a{font-size:14px;opacity:.95}
+    .cta-btn{
+      border:1px solid var(--accent);padding:8px 14px;border-radius:6px;
+      color:var(--accent);font-weight:600;background:transparent;cursor:pointer;
+    }
+
+    /* ── HERO ── */
+    .hero{
+      position:relative;height:78vh;min-height:520px;
+      display:flex;align-items:center;justify-content:center;
+      overflow:hidden;margin-top:72px;
+    }
+    .hero video,.hero .hero-image{
+      position:absolute;inset:0;width:100%;height:100%;
+      object-fit:cover;z-index:0;
+      filter:brightness(.5) saturate(.95);
+    }
+    .hero .hero-image{
+      background-image:url('https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&w=2000&auto=format&fit=crop');
+      background-size:cover;background-position:center;
+    }
+    .hero .overlay{position:relative;z-index:2;width:100%;display:flex;align-items:center;justify-content:center;padding:40px 20px}
+    .hero .inner{max-width:var(--max-width);width:100%;text-align:center;color:#fff}
+    .hero h1{
+      font-family:"Playfair Display",serif;margin:0;
+      font-size:48px;letter-spacing:6px;font-weight:700;text-transform:uppercase;
+    }
+    .hero p.lead{margin:12px 0 0;color:#e7e7e7;opacity:.9}
+
+    /* ── UPLOAD FORM ── */
+    .upload-box{
+      margin-top:28px;
+      background:rgba(255,255,255,.07);
+      border:1px solid rgba(197,161,90,.3);
+      border-radius:12px;
+      padding:28px 32px;
+      display:inline-block;
+      width:100%;
+      max-width:680px;
+      text-align:left;
+    }
+    .upload-box label{font-size:13px;color:#ccc;letter-spacing:.5px;display:block;margin-bottom:8px}
+
+    /* drag-drop zone */
+    .drop-zone{
+      border:2px dashed rgba(197,161,90,.5);
+      border-radius:8px;
+      padding:36px 20px;
+      text-align:center;
+      cursor:pointer;
+      transition:border-color .2s, background .2s;
+      position:relative;
+    }
+    .drop-zone:hover,.drop-zone.dragover{
+      border-color:var(--accent);
+      background:rgba(197,161,90,.06);
+    }
+    .drop-zone input[type="file"]{
+      position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;
+    }
+    .drop-zone .icon{font-size:36px;display:block;margin-bottom:8px}
+    .drop-zone .drop-label{color:#ccc;font-size:14px}
+    .drop-zone .file-name{color:var(--accent);font-size:13px;margin-top:6px;font-weight:600}
+
+    /* sensitivity slider */
+    .slider-row{margin-top:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+    .slider-row label{font-size:13px;color:#ccc;white-space:nowrap}
+    input[type=range]{
+      -webkit-appearance:none;flex:1;min-width:120px;height:4px;
+      background:linear-gradient(to right, var(--accent) 0%, var(--accent) 50%, rgba(255,255,255,.2) 50%);
+      border-radius:2px;outline:none;cursor:pointer;
+    }
+    input[type=range]::-webkit-slider-thumb{
+      -webkit-appearance:none;width:16px;height:16px;border-radius:50%;
+      background:var(--accent);cursor:pointer;border:2px solid #0b0b0b;
+    }
+    .slider-val{font-size:13px;color:var(--accent);font-weight:700;min-width:32px;text-align:right}
+
+    /* submit */
+    .generate-btn{
+      margin-top:22px;width:100%;padding:14px;
+      background:var(--accent);color:#0b0b0b;
+      border:none;border-radius:8px;font-size:15px;font-weight:700;
+      cursor:pointer;letter-spacing:.5px;
+      transition:opacity .2s,transform .1s;
+    }
+    .generate-btn:hover{opacity:.88}
+    .generate-btn:active{transform:scale(.99)}
+    .generate-btn:disabled{opacity:.45;cursor:not-allowed}
+
+    .hint{color:#aaa;font-size:12px;text-align:center;margin-top:10px}
+
+    /* ── PROGRESS ── */
+    #progressSection{display:none;max-width:680px;margin:32px auto 0;padding:0 20px;text-align:center}
+    .progress-track{
+      height:6px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;margin:18px 0 10px;
+    }
+    .progress-bar{
+      height:100%;width:0%;background:var(--accent);border-radius:3px;
+      transition:width .6s ease;
+    }
+    .progress-label{font-size:14px;color:#ccc}
+    .status-dot{
+      display:inline-block;width:8px;height:8px;border-radius:50%;
+      background:var(--accent);margin-right:8px;
+      animation:pulse 1.2s ease-in-out infinite;
+    }
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+    /* ── VIDEO RESULT ── */
+    #resultSection{
+      display:none;max-width:var(--max-width);
+      margin:40px auto;padding:0 20px;
+    }
+    .result-label{
+      font-family:"Playfair Display",serif;
+      font-size:24px;letter-spacing:3px;text-transform:uppercase;
+      margin-bottom:18px;text-align:center;color:var(--accent);
+    }
+    .video-wrap{
+      background:#000;border-radius:12px;overflow:hidden;
+      box-shadow:0 16px 48px rgba(0,0,0,.7);
+    }
+    .video-wrap video{width:100%;max-height:560px;display:block;outline:none}
+
+    .result-meta{
+      display:flex;align-items:center;justify-content:center;
+      gap:18px;margin-top:16px;flex-wrap:wrap;
+    }
+    .download-btn{
+      background:transparent;border:1px solid var(--accent);
+      color:var(--accent);padding:10px 20px;border-radius:6px;
+      font-weight:600;font-size:14px;cursor:pointer;
+      transition:background .2s,color .2s;
+    }
+    .download-btn:hover{background:var(--accent);color:#0b0b0b}
+
+    /* ── CATEGORY CARDS ── */
+    .section{padding:72px 20px;max-width:var(--max-width);margin:0 auto;color:#111}
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:18px}
+    .card{
+      background:#fff;padding:28px;border-radius:10px;color:#111;
+      box-shadow:0 10px 30px rgba(0,0,0,.06);text-align:center;
+    }
+    .card h3{margin:10px 0 6px;font-size:18px;letter-spacing:1px}
+    .card p{margin:0;color:var(--muted);font-size:14px}
+
+    /* ── BANNERS ── */
+    .banner{height:420px;position:relative;display:flex;align-items:center;justify-content:center;color:#fff}
+    .banner .bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:brightness(.45)}
+    .banner .center{position:relative;z-index:2;text-align:center}
+    .banner h2{font-family:"Playfair Display",serif;text-transform:uppercase;letter-spacing:6px;font-size:36px;margin:0 0 10px}
+    .play-btn{
+      display:inline-grid;place-items:center;width:64px;height:64px;border-radius:50%;
+      border:2px solid rgba(255,255,255,.9);cursor:pointer;background:rgba(0,0,0,.25);
+    }
+
+    /* ── FOOTER ── */
+    footer{background:#080808;padding:56px 20px;color:#ddd}
+    .footer-inner{max-width:var(--max-width);margin:0 auto;display:grid;grid-template-columns:1fr 360px;gap:28px}
+    .newsletter input{width:100%;padding:12px 10px;border-radius:6px;border:0;margin-bottom:10px;font-family:inherit}
+    .newsletter .sub{
+      background:var(--accent);color:#0b0b0b;padding:10px;border-radius:6px;
+      border:0;font-weight:700;cursor:pointer;width:100%;font-family:inherit;
+    }
+    .muted{color:var(--muted)}
+
+    /* error toast */
+    #errorToast{
+      display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+      background:#c0392b;color:#fff;padding:12px 24px;border-radius:8px;
+      font-size:14px;z-index:999;box-shadow:0 8px 24px rgba(0,0,0,.4);
+    }
+
+    @media(max-width:900px){
+      .cards{grid-template-columns:1fr;max-width:640px;margin:22px auto}
+      .hero h1{font-size:30px;letter-spacing:3px}
+      .banner{height:300px}
+      .footer-inner{grid-template-columns:1fr}
+      .upload-box{padding:20px}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+      <div class="mark">H</div>
+      <div>
+        <div style="font-weight:900">HARSH VERMA</div>
+        <div style="font-size:12px;color:#ddd;margin-top:2px">UI DESIGNER</div>
+      </div>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#narrative">Narrative</a></li>
+        <li><a href="#commercial">Commercial</a></li>
+        <li><a href="#music">Music Videos</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <button class="cta-btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Contact</button>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" aria-label="hero">
+    <video autoplay muted loop playsinline id="heroVideo">
+      <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+    </video>
+    <div class="hero-image" aria-hidden="true"></div>
+
+    <div class="overlay">
+      <div class="inner">
+        <h1>I KNOW WHY YOU ARE HERE,<br>EXAMS, I KNOW, I KNOW!!</h1>
+        <p class="lead">Yeah this is the point where you surrender to the power of video highlights!</p>
+
+        <!-- UPLOAD FORM -->
+        <div style="display:flex;justify-content:center">
+          <div class="upload-box">
+            <label>UPLOAD YOUR VIDEO</label>
+
+            <div class="drop-zone" id="dropZone">
+              <input type="file" id="videoFile" accept="video/*" />
+              <span class="icon">🎬</span>
+              <div class="drop-label">Drag & drop your video here, or click to browse</div>
+              <div class="file-name" id="fileName"></div>
+            </div>
+
+            <div class="slider-row">
+              <label>SENSITIVITY</label>
+              <input type="range" id="sensitivity" min="0.3" max="2.0" step="0.1" value="0.8"
+                     oninput="document.getElementById('sensVal').textContent=parseFloat(this.value).toFixed(1)" />
+              <span class="slider-val" id="sensVal">0.8</span>
+            </div>
+            <div style="font-size:11px;color:#888;margin-top:4px">
+              Lower = longer highlight &nbsp;|&nbsp; Higher = only top moments
+            </div>
+
+            <button class="generate-btn" id="generateBtn" onclick="submitJob()">
+              ✦ GENERATE HIGHLIGHTS
+            </button>
+            <div class="hint">Processing may take a few minutes depending on video length.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROGRESS -->
+  <div id="progressSection">
+    <div class="progress-label">
+      <span class="status-dot"></span>
+      <span id="progressText">Initialising…</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="resultSection">
+    <div class="result-label">✦ Your Highlight Reel</div>
+    <div class="video-wrap">
+      <video id="resultVideo" controls playsinline></video>
+    </div>
+    <div class="result-meta">
+      <a id="downloadLink" class="download-btn" download>⬇ Download Highlight</a>
+      <button class="download-btn" onclick="resetForm()">↩ Generate Another</button>
+    </div>
+  </div>
+
+  <!-- CATEGORY CARDS -->
+  <section class="section" style="background:#fff;color:#111">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap">
+      <div>
+        <h2 style="margin:0;font-family:'Playfair Display',serif">HARSH VERMA<br>
+          <span style="font-size:15px;color:var(--muted);font-weight:500">UI DESIGNER</span>
+        </h2>
+      </div>
+      <div style="text-align:right;color:var(--muted);max-width:420px">Well you know, I'm a bit of a video enthusiast!</div>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div style="font-size:28px;color:var(--accent)">🎬</div>
+        <h3>Narrative</h3>
+        <p class="muted">Short films & storytelling — cinematic pieces focused on emotion.</p>
+      </div>
+      <div class="card">
+        <div style="font-size:28px;color:var(--accent)">📺</div>
+        <h3>Commercial</h3>
+        <p class="muted">Ads, brand films and product visuals.</p>
+      </div>
+      <div class="card">
+        <div style="font-size:28px;color:var(--accent)">🎵</div>
+        <h3>Music Videos</h3>
+        <p class="muted">Artist-driven music videos and visual albums.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BANNERS -->
+  <section id="narrative" class="banner">
+    <div class="bg" style="background-image:url('https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?q=80&w=2000&auto=format&fit=crop')"></div>
+    <div class="center">
+      <h2>NARRATIVE</h2>
+      <div class="play-btn">▶</div>
+    </div>
+  </section>
+
+  <section id="commercial" class="banner">
+    <div class="bg" style="background-image:url('https://images.unsplash.com/photo-1501849538035-9548a6f1e7df?q=80&w=2000&auto=format&fit=crop')"></div>
+    <div class="center">
+      <h2>COMMERCIAL</h2>
+      <div class="play-btn">▶</div>
+    </div>
+  </section>
+
+  <section id="music" class="banner">
+    <div class="bg" style="background-image:url('https://images.unsplash.com/photo-1485579149621-3123dd979885?q=80&w=2000&auto=format&fit=crop')"></div>
+    <div class="center">
+      <h2>MUSIC VIDEOS</h2>
+      <div class="play-btn">▶</div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="contact">
+    <div class="footer-inner">
+      <div>
+        <h3 style="margin:0 0 14px;font-family:'Playfair Display',serif">Contact me</h3>
+        <p class="muted">So we can improve the highlights of my work.</p>
+        <p style="margin-top:20px">
+          <a href="mailto:harshverma0712@gmail.com" style="color:#ddd">harshverma0712@gmail.com</a> &bull; +91 8922008100
+        </p>
+        <p style="margin-top:22px;color:#999;font-size:13px">Follow</p>
+        <div style="display:flex;gap:12px;margin-top:8px">
+          <a href="#">Twitter</a>
+          <a href="#">Video</a>
+          <a href="#">YouTube</a>
+          <a href="#">Instagram</a>
+        </div>
+      </div>
+      <div class="newsletter">
+        <h4 style="margin:0 0 10px">Join my mailing list</h4>
+        <input type="email" placeholder="Enter your email"/>
+        <button class="sub" onclick="alert('Subscribed!')">Subscribe Now</button>
+        <p style="margin-top:12px;color:#999;font-size:13px">Mail to know more about my work.</p>
+      </div>
+    </div>
+    <div style="max-width:var(--max-width);margin:24px auto 0;padding:0 20px;color:#666;font-size:13px">
+      © 2026 by HARSH VERMA. All rights reserved.
+    </div>
+  </footer>
+
+  <!-- ERROR TOAST -->
+  <div id="errorToast"></div>
+
+  <script>
+    // ── Drag & drop feedback ───────────────────────────────────────────────────
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('videoFile');
+    const fileName  = document.getElementById('fileName');
+
+    fileInput.addEventListener('change', () => {
+      fileName.textContent = fileInput.files[0]?.name || '';
+    });
+    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      if (e.dataTransfer.files.length) {
+        fileInput.files = e.dataTransfer.files;
+        fileName.textContent = fileInput.files[0].name;
+      }
+    });
+
+    // ── Slider gradient update ─────────────────────────────────────────────────
+    const slider = document.getElementById('sensitivity');
+    slider.addEventListener('input', () => {
+      const pct = ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
+      slider.style.background = `linear-gradient(to right, var(--accent) 0%, var(--accent) ${pct}%, rgba(255,255,255,.2) ${pct}%)`;
+    });
+
+    // ── Progress state machine ─────────────────────────────────────────────────
+    const STATUS_LABELS = {
+      queued:        { text: 'Queued…',                  pct: 5  },
+      loading_model: { text: 'Loading AI models…',       pct: 20 },
+      processing:    { text: 'Generating highlights…',   pct: 60 },
+      done:          { text: 'Done!',                    pct: 100},
+      error:         { text: 'Something went wrong.',    pct: 0  },
+    };
+
+    let pollTimer = null;
+
+    function setProgress(status) {
+      const s = STATUS_LABELS[status] || { text: status, pct: 10 };
+      document.getElementById('progressText').textContent = s.text;
+      document.getElementById('progressBar').style.width  = s.pct + '%';
+    }
+
+    function showError(msg) {
+      const t = document.getElementById('errorToast');
+      t.textContent = '⚠ ' + msg;
+      t.style.display = 'block';
+      setTimeout(() => t.style.display = 'none', 6000);
+    }
+
+    // ── Submit ─────────────────────────────────────────────────────────────────
+    async function submitJob() {
+      const file = fileInput.files[0];
+      if (!file) { showError('Please select a video file first.'); return; }
+
+      const btn = document.getElementById('generateBtn');
+      btn.disabled = true;
+      btn.textContent = '⏳ Processing…';
+
+      // Show progress, hide result
+      document.getElementById('progressSection').style.display = 'block';
+      document.getElementById('resultSection').style.display   = 'none';
+      setProgress('queued');
+      document.getElementById('progressSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      const form = new FormData();
+      form.append('video', file);
+      form.append('sensitivity', document.getElementById('sensitivity').value);
+
+      let jobId;
+      try {
+        const res  = await fetch('/upload', { method: 'POST', body: form });
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+        jobId = data.job_id;
+      } catch (err) {
+        showError('Upload failed: ' + err.message);
+        resetBtn();
+        return;
+      }
+
+      // Poll for status
+      pollTimer = setInterval(async () => {
+        try {
+          const res  = await fetch('/status/' + jobId);
+          const data = await res.json();
+          setProgress(data.status);
+
+          if (data.status === 'done') {
+            clearInterval(pollTimer);
+            showResult('/outputs/' + data.output);
+            resetBtn();
+          } else if (data.status === 'error') {
+            clearInterval(pollTimer);
+            showError('Processing error: ' + (data.error || 'Unknown error'));
+            resetBtn();
+          }
+        } catch (e) {
+          // network hiccup — keep polling
+        }
+      }, 2500);
+    }
+
+    function showResult(videoUrl) {
+      const vid  = document.getElementById('resultVideo');
+      const link = document.getElementById('downloadLink');
+      vid.src    = videoUrl;
+      link.href  = videoUrl;
+
+      document.getElementById('resultSection').style.display = 'block';
+      document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      vid.play().catch(() => {});
+    }
+
+    function resetBtn() {
+      const btn = document.getElementById('generateBtn');
+      btn.disabled    = false;
+      btn.textContent = '✦ GENERATE HIGHLIGHTS';
+    }
+
+    function resetForm() {
+      fileInput.value = '';
+      fileName.textContent = '';
+      document.getElementById('progressSection').style.display = 'none';
+      document.getElementById('resultSection').style.display   = 'none';
+      if (pollTimer) clearInterval(pollTimer);
+      resetBtn();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ── Hero video visibility ──────────────────────────────────────────────────
+    (function(){
+      const vid = document.getElementById('heroVideo');
+      if (!vid) return;
+      new IntersectionObserver(entries => {
+        entries.forEach(e => e.isIntersecting ? vid.play().catch(()=>{}) : vid.pause());
+      }, { threshold: 0.3 }).observe(vid);
+    })();
+
+    // ── Smooth nav ─────────────────────────────────────────────────────────────
+    document.querySelectorAll('nav a').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        const el = document.querySelector(a.getAttribute('href'));
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  </script>
+</body>
+</html>
